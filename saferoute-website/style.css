@@ -9,6 +9,7 @@ body {
   background: #f8fafc;
 }
 
+/* NAVBAR */
 .navbar {
   height: 70px;
   padding: 0 40px;
@@ -34,6 +35,7 @@ nav a {
   font-weight: 600;
 }
 
+/* HERO */
 .hero {
   min-height: 520px;
   display: grid;
@@ -48,7 +50,6 @@ nav a {
   font-size: 56px;
   line-height: 1.05;
   margin: 0;
-  max-width: 650px;
 }
 
 .hero p {
@@ -56,6 +57,7 @@ nav a {
   color: #4b5563;
 }
 
+/* BUTTONS */
 .btn,
 button {
   background: #2563eb;
@@ -65,8 +67,6 @@ button {
   border-radius: 12px;
   font-weight: 700;
   cursor: pointer;
-  text-decoration: none;
-  display: inline-block;
 }
 
 .secondary {
@@ -75,6 +75,7 @@ button {
   border: 1px solid #bfdbfe;
 }
 
+/* CARDS */
 .hero-card,
 .feature-card,
 .panel,
@@ -85,6 +86,7 @@ button {
   box-shadow: 0 14px 40px rgba(0,0,0,0.08);
 }
 
+/* FEATURES */
 .features {
   padding: 30px 70px 60px;
   display: grid;
@@ -92,21 +94,9 @@ button {
   gap: 22px;
 }
 
-.demo,
-.how {
+/* DEMO */
+.demo {
   padding: 70px;
-}
-
-.demo h2,
-.how h2 {
-  font-size: 36px;
-  text-align: center;
-  margin-bottom: 8px;
-}
-
-.demo > p {
-  text-align: center;
-  color: #6b7280;
 }
 
 .search-box {
@@ -126,113 +116,117 @@ select {
   padding: 14px;
   border-radius: 12px;
   border: 1px solid #d1d5db;
-  font-size: 15px;
 }
 
+/* LAYOUT */
 .demo-layout {
   display: grid;
   grid-template-columns: 1.4fr 0.8fr;
   gap: 24px;
 }
 
+/* ========================= */
+/* ✅ WORKING MAP SECTION */
+/* ========================= */
 #map {
   height: 590px;
   border-radius: 22px;
-  overflow: hidden;
+  position: relative;
+
+  /* ✅ ALWAYS WORKING IMAGE */
+  background: url("https://picsum.photos/1200/800") center/cover no-repeat;
+
   box-shadow: 0 14px 40px rgba(0,0,0,0.1);
 }
 
+/* GRID OVERLAY */
+#map {
+  height: 590px;
+  border-radius: 22px;
+  position: relative;
+
+  /* Clean base */
+  background-color: #f8fafc;
+
+  /* Street grid */
+  background-image:
+    linear-gradient(#d1d5db 1px, transparent 1px),
+    linear-gradient(90deg, #d1d5db 1px, transparent 1px);
+
+  background-size: 40px 40px;
+
+  box-shadow: 0 14px 40px rgba(0,0,0,0.1);
+}
+
+/* PANEL */
 .panel {
   max-height: 590px;
   overflow-y: auto;
 }
 
-.small {
-  color: #6b7280;
-  font-size: 14px;
-}
-
+/* ROUTES */
 .route-card {
   margin-top: 16px;
-  border: 1px solid #e5e7eb;
   border-left: 7px solid #22c55e;
   border-radius: 16px;
   padding: 18px;
   background: white;
 }
 
-.route-card h4 {
-  margin: 0 0 10px;
-}
+.low { border-left-color: #22c55e; }
+.medium { border-left-color: #f59e0b; }
+.high { border-left-color: #ef4444; }
 
 .score {
   font-size: 34px;
   font-weight: 900;
 }
 
-.low {
-  border-left-color: #22c55e;
-}
-
-.medium {
-  border-left-color: #f59e0b;
-}
-
-.high {
-  border-left-color: #ef4444;
-}
-
+/* AGENT */
 .agent-box {
   max-width: 1150px;
-  margin: 24px auto 0;
-  border: 1px solid #bfdbfe;
-  background: #eff6ff;
+  margin: 24px auto;
 }
 
-.agent-box.alert {
-  background: #fef2f2;
-  border-color: #fecaca;
-}
-
-.hidden {
-  display: none;
-}
-
-.steps {
-  margin-top: 40px;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-  text-align: center;
-}
-
-.circle {
-  width: 70px;
-  height: 70px;
-  margin: 0 auto 16px;
-  border-radius: 50%;
-  background: #dbeafe;
-  color: #2563eb;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 26px;
-  font-weight: 900;
-}
-
+/* RESPONSIVE */
 @media (max-width: 900px) {
-  .hero,
-  .features,
   .demo-layout,
-  .steps {
+  .features {
     grid-template-columns: 1fr;
   }
 
   .search-box {
     grid-template-columns: 1fr;
   }
+}
+.map-point {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: black;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
 
-  .hero h1 {
-    font-size: 40px;
-  }
+.map-label {
+  position: absolute;
+  font-size: 12px;
+  font-weight: 600;
+  transform: translate(-50%, -150%);
+}
+
+.route-line {
+  position: absolute;
+  height: 4px;
+  background: #2563eb;
+  transform-origin: left center;
+  border-radius: 4px;
+}
+
+.moving-dot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #2563eb;
+  border-radius: 50%;
 }
