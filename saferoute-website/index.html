@@ -1,67 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
   <title>SafeRoute</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <header class="navbar">
   <div class="logo">🛡️ SafeRoute</div>
+  <nav>
+    <a>Home</a>
+    <a class="active">Live Demo</a>
+    <a>How It Works</a>
+  </nav>
+  <button class="demo-btn">Try Live Demo</button>
 </header>
 
-<section id="home" class="hero">
-  <h1>Predictive Safety Routing for Cities</h1>
-  <p>Know how safe your route will feel — before you go.</p>
-</section>
-
-<!-- 🔥 DEMO SECTION (UPDATED) -->
-<section id="demo" class="demo">
+<section class="demo">
 
   <h2>Try SafeRoute</h2>
 
   <div class="search-bar">
-    <input id="origin" value="UW Bothell" />
-    <input id="destination" value="Seattle Downtown" />
+    <input placeholder="UW Bothell">
+    <input placeholder="Seattle Downtown">
 
-    <select id="mode">
+    <select>
       <option>Safer</option>
       <option>Balanced</option>
-      <option>Fastest</option>
     </select>
 
-    <button onclick="analyzeRoutes(false)">Analyze Route</button>
+    <button onclick="loadRoutes(false)">Analyze Route</button>
   </div>
 
   <div class="main-layout">
 
-    <div id="map"></div>
+    <!-- MAP -->
+    <div class="map-container">
+      <img src="assets/map.png" class="map-img">
 
-    <div class="routes-panel">
-      <div class="panel-top">
+      <!-- fake route lines -->
+      <div class="route green"></div>
+      <div class="route yellow"></div>
+      <div class="route red"></div>
+    </div>
+
+    <!-- SIDE PANEL -->
+    <div class="panel">
+
+      <div class="panel-header">
         <h3>Recommended Routes</h3>
-        <button onclick="analyzeRoutes(true)" class="simulate-btn">
+        <button onclick="loadRoutes(true)" class="simulate">
           Simulate 30 Min Later
         </button>
       </div>
 
-      <div id="routesList"></div>
+      <div id="routes"></div>
+
     </div>
 
   </div>
 
-  <div id="agentBox" class="agent-box"></div>
+  <div id="agent" class="agent"></div>
 
 </section>
 
 <script src="script.js"></script>
-
-<!-- 🔑 ADD YOUR GOOGLE MAPS KEY HERE -->
-<script async defer
-  src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap">
-</script>
-
 </body>
 </html>

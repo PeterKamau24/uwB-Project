@@ -1,18 +1,32 @@
 body {
-  font-family: Inter, Arial;
+  font-family: Inter, sans-serif;
   margin: 0;
   background: #f5f7fb;
 }
 
 .navbar {
-  padding: 20px;
-  font-weight: bold;
-  font-size: 20px;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 40px;
   background: white;
 }
 
-.hero {
-  padding: 40px;
+.logo { font-weight: bold; }
+
+nav a {
+  margin: 0 15px;
+  color: gray;
+}
+
+nav .active {
+  color: #22c55e;
+}
+
+.demo-btn {
+  background: #2563eb;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 8px;
 }
 
 .demo {
@@ -23,7 +37,6 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr 150px 200px;
   gap: 10px;
-  margin-bottom: 20px;
 }
 
 input, select {
@@ -33,8 +46,6 @@ input, select {
 }
 
 button {
-  background: #2563eb;
-  color: white;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -43,53 +54,76 @@ button {
 .main-layout {
   display: grid;
   grid-template-columns: 2fr 1fr;
+  margin-top: 20px;
   gap: 20px;
 }
 
-#map {
-  height: 500px;
+/* MAP */
+.map-container {
+  position: relative;
+}
+
+.map-img {
+  width: 100%;
   border-radius: 15px;
 }
 
-.routes-panel {
+/* FAKE ROUTES */
+.route {
+  position: absolute;
+  width: 200px;
+  height: 5px;
+  top: 50%;
+  left: 30%;
+}
+
+.green { background: #22c55e; }
+.yellow { background: orange; top: 60%; }
+.red { background: red; top: 70%; }
+
+/* PANEL */
+.panel {
   background: white;
-  padding: 15px;
+  padding: 20px;
   border-radius: 15px;
 }
 
-.panel-top {
+.panel-header {
   display: flex;
   justify-content: space-between;
 }
 
-.simulate-btn {
+.simulate {
   background: #eef2ff;
   color: #2563eb;
+  padding: 6px 10px;
 }
 
-.route-card {
+/* CARDS */
+.card {
   margin-top: 15px;
   padding: 15px;
   border-radius: 12px;
-  border-left: 6px solid;
+  border-left: 5px solid;
 }
 
-.low { border-color: green; }
+.low { border-color: #22c55e; }
 .medium { border-color: orange; }
 .high { border-color: red; }
 
 .score {
-  font-size: 24px;
+  font-size: 26px;
   font-weight: bold;
 }
 
-.agent-box {
+/* AGENT */
+.agent {
   margin-top: 20px;
   padding: 15px;
   background: #e0f2fe;
   border-radius: 10px;
 }
 
-.agent-box.alert {
+.alert {
   background: #fee2e2;
 }

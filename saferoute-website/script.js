@@ -1,109 +1,46 @@
-let map;
-let directionsService;
-let polylines = [];
+function loadRoutes(future) {
 
-function initMap() {
-  map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: 47.6062, lng: -122.3321 },
-    zoom: 11,
-  });
+  const routes = [
+    { name: "Route A", score: 82 },
+    { name: "Route B", score: 58 },
+    { name: "Route C", score: 32 }
+  ];
 
-  directionsService = new google.maps.DirectionsService();
-}
+  const container = document.getElementById("routes");
+  container.innerHTML = "";
 
-function analyzeRoutes(future = false) {
-  const origin = document.getElementById("origin").value;
-  const destination = document.getElementById("destination").value;
+  let best = routes[0];
+  let worst = routes[2];
 
-  directionsService.route(
-    {
-      origin,
-      destination,
-      travelMode: "DRIVING",
-      provideRouteAlternatives: true,
-    },
-    (res, status) => {
-      if (status !== "OK") return alert("Error loading routes");
+  routes.forEach((r, i) => {
 
-      renderRoutes(res.routes.slice(0, 3), future);
-    }
-  );
-}
-
-function renderRoutes(routes, future) {
-  clearMap();
-
-  let list = document.getElementById("routesList");
-  list.innerHTML = "";
-
-  let best = null;
-  let worst = null;
-
-  routes.forEach((route, i) => {
-    let score = 85 - i * 20;
-
-    if (future) score -= 15;
+    let score = r.score;
+    if (future) score -= 10;
 
     let level =
-      score >= 70 ? "Low Risk" :
-      score >= 50 ? "Medium Risk" : "High Risk";
+      score >= 70 ? "low" :
+      score >= 50 ? "medium" : "high";
 
-    if (!best || score > best.score) best = { name: `Route ${i+1}`, score };
-    if (!worst || score < worst.score) worst = { name: `Route ${i+1}`, score };
-
-    drawRoute(route, level);
-
-    list.innerHTML += `
-      <div class="route-card ${getClass(level)}">
-        <h4>Route ${i+1}</h4>
-        <p>${route.legs[0].duration.text}</p>
+    container.innerHTML += `
+      <div class="card ${level}">
+        <h4>${r.name}</h4>
         <div class="score">${score}%</div>
-        <p>${level}</p>
+        <p>${level.toUpperCase()} RISK</p>
       </div>
     `;
   });
 
-  showAgent(best, worst, future);
-}
-
-function drawRoute(route, level) {
-  const color =
-    level === "Low Risk" ? "green" :
-    level === "Medium Risk" ? "orange" : "red";
-
-  const polyline = new google.maps.Polyline({
-    path: route.overview_path,
-    strokeColor: color,
-    strokeWeight: 5,
-    map,
-  });
-
-  polylines.push(polyline);
-}
-
-function clearMap() {
-  polylines.forEach(p => p.setMap(null));
-  polylines = [];
-}
-
-function getClass(level) {
-  if (level === "Low Risk") return "low";
-  if (level === "Medium Risk") return "medium";
-  return "high";
-}
-
-function showAgent(best, worst, future) {
-  const box = document.getElementById("agentBox");
+  const agent = document.getElementById("agent");
 
   if (future) {
-    box.className = "agent-box alert";
-    box.innerHTML = `
-      ⚠️ Route becomes unsafe → Switch to ${best.name}
+    agent.className = "agent alert";
+    agent.innerHTML = `
+      ⚠️ Route C becomes unsafe in 30 mins → Switch to Route A
     `;
   } else {
-    box.className = "agent-box";
-    box.innerHTML = `
-      🤖 Best option: ${best.name}
+    agent.className = "agent";
+    agent.innerHTML = `
+      🤖 Best option: Route A
     `;
   }
 }
