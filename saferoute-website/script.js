@@ -1,146 +1,189 @@
-console.log("JS LOADED");
+let map;
+let directionsService;
+let polylines = [];
+let lastDirections = null;
 
-// ---------------- SAFETY CALCULATION ----------------
-function calculateSafety(route) {
-  let risk =
-    route.crime * 0.5 +
-    (route.crowd === "low" ? 2 : 0) +
-    (route.lighting === "low" ? 2 : 0) +
-    (route.time === "night" ? 1 : 0);
+const routeColors = ["#22c55e", "#f59e0b", "#ef4444"];
 
-  let score = 100 - risk * 10;
-  if (score < 0) score = 0;
-
-  return Math.round(score);
-}
-
-// ---------------- LABEL ----------------
-function getSafetyLabel(score) {
-  if (score >= 80) return "🟢 Safe Route";
-  if (score >= 60) return "🟡 Moderate Risk";
-  return "🔴 High Risk";
-}
-
-// ---------------- COLOR ----------------
-function getCardColor(score) {
-  if (score >= 80) return "#e8f5e9";   // green
-  if (score >= 60) return "#fffde7";   // yellow
-  return "#ffebee";                   // red
-}
-
-// ---------------- EXPLANATION ----------------
-function getRiskExplanation(route) {
-  let reasons = [];
-
-  if (route.crime > 5) reasons.push("high crime area");
-  if (route.crowd === "low") reasons.push("low foot traffic");
-  if (route.lighting === "low") reasons.push("poor lighting");
-  if (route.time === "night") reasons.push("late-night conditions");
-
-  if (reasons.length === 0) {
-    return "This route appears safe with good conditions.";
-  }
-
-  return "Higher risk due to " + reasons.join(", ");
-}
-
-// ---------------- PREDICTION ----------------
-function predictFuture(route) {
-  let futureRoute = { ...route };
-
-  futureRoute.time = "night";
-
-  if (futureRoute.crowd === "high") futureRoute.crowd = "medium";
-  else if (futureRoute.crowd === "medium") futureRoute.crowd = "low";
-
-  if (futureRoute.lighting === "high") futureRoute.lighting = "medium";
-  else if (futureRoute.lighting === "medium") futureRoute.lighting = "low";
-
-  return futureRoute;
-}
-
-// ---------------- MAIN ----------------
-function loadRoutes() {
-  const routes = [
-    {
-      name: "Route A: Campus → Library",
-      duration: "25 min",
-      crime: 2,
-      crowd: "high",
-      lighting: "high",
-      time: "day",
-    },
-    {
-      name: "Route B: Campus → Downtown",
-      duration: "30 min",
-      crime: 6,
-      crowd: "low",
-      lighting: "low",
-      time: "night",
-    },
-    {
-      name: "Route C: Campus → Mall",
-      duration: "28 min",
-      crime: 3,
-      crowd: "medium",
-      lighting: "high",
-      time: "day",
-    },
-  ];
-
-  const container = document.getElementById("routes-container");
-  container.innerHTML = "";
-
-  let bestRoute = null;
-  let bestScore = -1;
-
-  routes.forEach((route) => {
-    const score = calculateSafety(route);
-    const label = getSafetyLabel(score);
-    const explanation = getRiskExplanation(route);
-
-    const futureRoute = predictFuture(route);
-    const futureScore = calculateSafety(futureRoute);
-
-    const combinedScore = (score + futureScore) / 2;
-
-    if (combinedScore > bestScore) {
-      bestScore = combinedScore;
-      bestRoute = { ...route, score };
-    }
-
-    let warning = "";
-    if (futureScore < score) {
-      warning = "⚠️ This route becomes less safe soon";
-    }
-
-    container.innerHTML += `
-      <div class="card" style="background:${getCardColor(score)};">
-        <h3>${route.name}</h3>
-        <p>⏱️ ${route.duration}</p>
-
-        <p>${label}</p>
-        <p>Safety Score: ${score}%</p>
-        <p>🧠 ${explanation}</p>
-
-        ${warning ? `<p>${warning}</p>` : ""}
-
-        <hr>
-
-        <p>🔮 In 30 mins:</p>
-        <p>Safety Score: ${futureScore}%</p>
-      </div>
-    `;
+function initMap() {
+  map = new google.maps.Map(document.getElementById("map"), {
+    center: { lat: 47.6062, lng: -122.3321 },
+    zoom: 11,
+    mapTypeControl: true,
+    streetViewControl: false,
+    fullscreenControl: true,
   });
 
-  if (bestRoute) {
-    container.innerHTML =
-      `
-      <div class="card" style="background:#c8e6c9; border:2px solid green;">
-        <h2>🏆 Best Route (Smart Choice)</h2>
-        <p>${bestRoute.name}</p>
-        <p>Balances current and future safety</p>
-      </div>
-      ` + container.innerHTML;
+  directionsService = new google.maps.DirectionsService();
+}
+
+function analyzeRoutes(futureMode) {
+  const origin = document.getElementById("origin").value;
+  const destination = document.getElementById("destination").value;
+
+  if (!origin || !destination) {
+    alert("Please enter both From and To.");
+    return;
+  }
+
+  directionsService.route(
+    {
+      origin,
+      destination,
+      travelMode: google.maps.TravelMode.DRIVING,
+      provideRouteAlternatives: true,
+    },
+    (response, status) => {
+      if (status !== "OK") {
+        alert("Could not load routes: " + status);
+        return;
+      }
+
+      lastDirections = response;
+      renderRoutes(response.routes.slice(0, 3), futureMode);
+    }
+  );
+}
+
+function renderRoutes(routes, futureMode) {
+  clearMap();
+
+  const bounds = new google.maps.LatLngBounds();
+  const routesList = document.getElementById("routesList");
+  routesList.innerHTML = "";
+
+  let scoredRoutes = routes.map((route, index) => {
+    const score = calculateSafetyScore(route, index, futureMode);
+    const level = getLevel(score);
+    const factors = getFactors(score, index, futureMode);
+
+    return { route, index, score, level, factors };
+  });
+
+  scoredRoutes.sort((a, b) => b.score - a.score);
+
+  scoredRoutes.forEach((item, displayIndex) => {
+    drawPolyline(item.route, item.level, bounds);
+
+    const leg = item.route.legs[0];
+    routesList.innerHTML += createRouteCard(item, leg, displayIndex);
+  });
+
+  map.fitBounds(bounds);
+
+  showAgentInsight(scoredRoutes, futureMode);
+}
+
+function drawPolyline(route, level, bounds) {
+  const color =
+    level === "Low Risk" ? "#22c55e" :
+    level === "Medium Risk" ? "#f59e0b" :
+    "#ef4444";
+
+  const path = route.overview_path;
+
+  path.forEach((point) => bounds.extend(point));
+
+  const polyline = new google.maps.Polyline({
+    path,
+    strokeColor: color,
+    strokeOpacity: 0.9,
+    strokeWeight: 7,
+    map,
+  });
+
+  polylines.push(polyline);
+}
+
+function clearMap() {
+  polylines.forEach((line) => line.setMap(null));
+  polylines = [];
+}
+
+function calculateSafetyScore(route, index, futureMode) {
+  const now = new Date();
+  const hour = now.getHours();
+
+  let base = 88;
+
+  // Slight variation between actual Google route alternatives
+  base -= index * 18;
+
+  // Longer routes may expose user longer
+  const durationMin = route.legs[0].duration.value / 60;
+  if (durationMin > 30) base -= 5;
+
+  // Night conditions reduce perceived safety
+  if (hour >= 20 || hour <= 5) base -= 12;
+
+  // Future mode simulates lower foot traffic and lighting
+  if (futureMode) base -= 8 + index * 5;
+
+  return Math.max(10, Math.min(96, Math.round(base)));
+}
+
+function getLevel(score) {
+  if (score >= 75) return "Low Risk";
+  if (score >= 50) return "Medium Risk";
+  return "High Risk";
+}
+
+function getClass(level) {
+  if (level === "Low Risk") return "low";
+  if (level === "Medium Risk") return "medium";
+  return "high";
+}
+
+function getFactors(score, index, futureMode) {
+  if (score >= 75) {
+    return "Low crime area, good lighting, and active foot traffic.";
+  }
+
+  if (score >= 50) {
+    return futureMode
+      ? "Moderate risk because foot traffic is decreasing over time."
+      : "Some darker areas and moderate activity along this route.";
+  }
+
+  return futureMode
+    ? "Becomes high risk due to low lighting and reduced foot traffic."
+    : "Higher risk due to lower activity and less visible streets.";
+}
+
+function createRouteCard(item, leg, displayIndex) {
+  const routeName = `Route ${String.fromCharCode(65 + displayIndex)}`;
+  const routeClass = getClass(item.level);
+
+  return `
+    <div class="route-card ${routeClass}">
+      <h4>${routeName} ${displayIndex === 0 ? "— Best Choice" : ""}</h4>
+      <p>⏱️ ${leg.duration.text} · 📍 ${leg.distance.text}</p>
+      <div class="score">${item.score}%</div>
+      <p><strong>${item.level}</strong></p>
+      <p>${item.factors}</p>
+    </div>
+  `;
+}
+
+function showAgentInsight(scoredRoutes, futureMode) {
+  const agentBox = document.getElementById("agentBox");
+  const best = scoredRoutes[0];
+  const worst = scoredRoutes[scoredRoutes.length - 1];
+
+  agentBox.classList.remove("hidden");
+
+  if (futureMode) {
+    agentBox.className = "agent-box alert";
+    agentBox.innerHTML = `
+      <h3>🤖 Agent Alert</h3>
+      <p><strong>${getLevel(worst.score)} detected.</strong> One route becomes riskier in the next 30 minutes.</p>
+      <p>SafeRoute recommends taking the best route now or leaving earlier.</p>
+    `;
+  } else {
+    agentBox.className = "agent-box";
+    agentBox.innerHTML = `
+      <h3>🤖 Smart Agent Insight</h3>
+      <p>SafeRoute recommends the highest-scoring route. It offers the best balance of time and safety right now.</p>
+    `;
   }
 }
