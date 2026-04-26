@@ -60,7 +60,6 @@ function renderFakeRoutes(futureMode) {
     `;
   });
 
-  showAgentInsight(routes, futureMode);
 }
 
 /* ===============================

@@ -26,13 +26,16 @@ body {
 .logo {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   font-weight: 800;
   font-size: 22px;
 }
 
 .shield {
-  font-size: 20px;
+  width: 24px;
+  height: 24px;
+  fill: #1a73e8; /* Google blue */
+  flex-shrink: 0;
 }
 
 nav a {
@@ -44,24 +47,21 @@ nav a {
 
 /* HERO */
 .hero {
-  min-height: 520px;
+  min-height: 700px;
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
   gap: 40px;
-  padding: 80px 70px;
+  padding: 110px 100px 100px;
   align-items: center;
 
-  /* FIXED gradient */
-  background:
-    url("imgBG.png") right center / cover no-repeat;
+  background: url("imgBG2.png") center 20% / cover no-repeat;
 }
 
 .hero h1 {
-  font-size: 64px;
+  font-size: 50px;
   line-height: 1.05;
-  margin: 0;
-  font-weight: 800;
-  max-width: 520px;
+  font-weight: 1000;
+  max-width: 600px;
 }
 
 .hero p {
@@ -70,6 +70,31 @@ nav a {
   color: #5f6368;
   max-width: 460px;
 }
+
+.hero-content {
+  max-width: 600px;
+}
+
+/* LOGO IN HERO */
+.hero-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 40px;
+  margin-bottom: 20px;
+  color: #1f2937;
+  animation: fadeUp 0.8s ease;
+  opacity: 1;
+}
+
+.hero-logo .shield {
+  width: 40px;
+  height: 40px;
+  fill: #2563eb;
+}
+
+
 
 /* BUTTONS */
 .btn {
@@ -139,12 +164,25 @@ button.primary:hover {
   transform: translateY(-6px);
 }
 
-/* FEATURES */
 .features {
-  padding: 30px 70px 60px;
+  margin-top: 60px; /* controls distance from hero */
+  padding: 0 70px 60px;
+  text-align: center;
+}
+
+.features-header {
+  margin-bottom: 50px; /* space between title and cards */
+}
+
+.features-header h2 {
+  font-size: 32px;
+  font-weight: 800px;
+}
+
+.feature-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 22px;
+  gap: 25px;
 }
 
 /* DEMO */
@@ -285,18 +323,79 @@ select {
 }
 
 .how {
-  padding: 80px 70px;
+  padding: 80px 20px;
   text-align: center;
-  background: #ffffff;
 }
 
-.steps {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 30px;
-  margin-top: 40px;
+.how h2 {
+  font-size: 36px;
+  margin-bottom: 60px;
 }
 
+/* FLOW CONTAINER */
+.route-flow {
+  position: relative;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* THE ROUTE LINE */
+.route-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 6px;
+  height: 100%;
+  transform: translateX(-50%);
+  border-radius: 10px;
+
+  /* 🔥 gradient like routes */
+  background: linear-gradient(
+    to bottom,
+    #22c55e,
+    #facc15,
+    #f97316,
+    #ef4444
+  );
+}
+
+/* STEP */
+.route-step {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 60px 0;
+}
+
+/* ZIG-ZAG */
+.route-step:nth-child(even) {
+  flex-direction: row-reverse;
+}
+
+/* NODE (like map point) */
+.node {
+  width: 44px;
+  height: 44px;
+  background: white;
+  border: 5px solid #2563eb;
+  border-radius: 50%;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+/* TEXT BOX */
+.text {
+  background: white;
+  padding: 18px 22px;
+  border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  max-width: 260px;
+  margin: 0 20px;
+  text-align: left;
+}
 .circle {
   width: 50px;
   height: 50px;
@@ -312,4 +411,12 @@ select {
 
 .hidden {
   display: none;
+}
+
+.green {
+  color: #34a853; /* Google green */
+}
+
+.blue {
+  color: #1a73e8; /* your button blue */
 }

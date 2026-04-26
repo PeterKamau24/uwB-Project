@@ -10,8 +10,8 @@
 <body>
   <header class="navbar">
     <div class="logo">
-  <span class="shield">🛡️</span>
-  SafeRoute
+  <svg class="shield" viewBox="0 0 24 24">
+  </svg>
 </div>
     <nav>
       <a href="#home">Home</a>
@@ -20,21 +20,94 @@
     </nav>
   </header>
 
-  <section id="home" class="hero">
-    <div>
-      <h1>Predictive Safety Routing for Cities</h1>
-      <p>Know how safe your route will feel — before you go.</p>
-      <a class="btn" href="#demo">Try Live Demo</a>
+<section id="home" class="hero">
+  <div class="hero-content">
+
+    <!-- 🔥 LOGO INSIDE HERO -->
+    <div class="hero-logo">
+      <svg class="shield" viewBox="0 0 24 24">
+        <path d="M12 2L4 5v6c0 5.25 3.4 10.74 8 12 4.6-1.26 8-6.75 8-12V5l-8-3z"/>
+      </svg>
+      <span>SafeRoute</span>
     </div>
 
-   
-  </section>
+    <h1>
+      Smarter <span class="blue">Decisions</span> for
+      <span class="green">Safer</span> Routes
+    </h1>
 
-  <section class="features">
-    <div class="feature-card">🛡️ <h3>Safety Scoring</h3><p>Scores routes using risk factors.</p></div>
-    <div class="feature-card">⏳ <h3>Future Prediction</h3><p>Shows how safety changes over time.</p></div>
-    <div class="feature-card">🤖 <h3>Smart Agent</h3><p>Suggests safer actions.</p></div>
-  </section>
+    <p>See how safe your journey is before you leave.</p>
+
+    <a class="btn" href="#demo">Try Live Demo</a>
+
+  </div>
+</section>
+
+   <section class="features">
+  <div class="features-header">
+    <h2>Why SafeRoute?</h2>
+  </div>
+
+  <div class="feature-grid">
+    <div class="feature-card">
+      🛡️ 
+      <h3>Safety Scoring</h3>
+      <p>Scores routes using risk factors.</p>
+    </div>
+
+    <div class="feature-card">
+      ⏳ 
+      <h3>Future Prediction</h3>
+      <p>Shows how safety changes over time.</p>
+    </div>
+
+    <div class="feature-card">
+      🤖 
+      <h3>Smart Agent</h3>
+      <p>Suggests safer actions.</p>
+    </div>
+  </div>
+</section>
+
+  <section id="how" class="how">
+  <h2>How SafeRoute Works</h2>
+
+  <div class="route-flow">
+    <div class="route-line"></div>
+
+    <div class="route-step">
+      <div class="node">1</div>
+      <div class="text">
+        <h3>Enter Route</h3>
+        <p>Input your start and destination.</p>
+      </div>
+    </div>
+
+    <div class="route-step">
+      <div class="node">2</div>
+      <div class="text">
+        <h3>Analyze Safety</h3>
+        <p>We evaluate lighting, activity, and risk.</p>
+      </div>
+    </div>
+
+    <div class="route-step">
+      <div class="node">3</div>
+      <div class="text">
+        <h3>Predict Risk</h3>
+        <p>AI estimates safety over time.</p>
+      </div>
+    </div>
+
+    <div class="route-step">
+      <div class="node">4</div>
+      <div class="text">
+        <h3>Get Recommendation</h3>
+        <p>Choose the safest route instantly.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
   <section id="demo" class="demo">
     <h2>Try SafeRoute</h2>
@@ -65,36 +138,7 @@
 <div id="agentBox" class="agent-box hidden"></div>
   </section>
 
-  <section id="how" class="how">
-    <h2>How SafeRoute Works</h2>
-
-    <div class="steps">
-      <div>
-        <div class="circle">1</div>
-        <h3>Enter Route</h3>
-        <p>User enters start and destination.</p>
-      </div>
-
-      <div>
-        <div class="circle">2</div>
-        <h3>Analyze Data</h3>
-        <p>We evaluate route time, safety factors, and context.</p>
-      </div>
-
-      <div>
-        <div class="circle">3</div>
-        <h3>Predict Safety</h3>
-        <p>We estimate how risk changes in the next 30 minutes.</p>
-      </div>
-
-      <div>
-        <div class="circle">4</div>
-        <h3>Suggest Action</h3>
-        <p>The agent recommends a safer route or better timing.</p>
-      </div>
-    </div>
-  </section>
-
+  
   <script src="script.js"></script>
 </body>
 </html>
