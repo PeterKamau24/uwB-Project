@@ -9,7 +9,10 @@
 
 <body>
   <header class="navbar">
-    <div class="logo">🛡️ SafeRoute</div>
+    <div class="logo">
+  <span class="shield">🛡️</span>
+  SafeRoute
+</div>
     <nav>
       <a href="#home">Home</a>
       <a href="#demo">Live Demo</a>
@@ -24,12 +27,7 @@
       <a class="btn" href="#demo">Try Live Demo</a>
     </div>
 
-    <div class="hero-card">
-      <h3>SafeRoute Preview</h3>
-      <p>🟢 Route A — 82% Safe</p>
-      <p>🟡 Route B — 58% Moderate</p>
-      <p>🔴 Route C — 32% High Risk</p>
-    </div>
+   
   </section>
 
   <section class="features">
@@ -47,28 +45,24 @@
       <input id="origin" placeholder="From (e.g. UW Bothell)" />
       <input id="destination" placeholder="To (e.g. Pike Place Market)" />
 
-      <select id="mode">
-        <option>Safer</option>
-        <option>Balanced</option>
-        <option>Fastest</option>
-      </select>
-
-      <button onclick="analyzeRoutes(false)">Analyze Route</button>
-      <button class="secondary" onclick="analyzeRoutes(true)">Simulate 30 Min Later</button>
-      <button onclick="drawStaticRoute()">TEST ROUTE</button>
+     <button class="primary" onclick="analyzeRoutes(false)">
+  Analyze Route
+</button>
     </div>
 
-    <div class="demo-layout">
-      <div id="map"></div>
+  <div id="resultsSection" class="demo-layout hidden">
 
-      <aside class="panel">
-        <h3>Recommended Routes</h3>
-        <p class="small">Based on current conditions</p>
-        <div id="routesList"></div>
-      </aside>
-    </div>
+  <div id="map"></div>
 
-    <div id="agentBox" class="agent-box hidden"></div>
+  <aside class="panel">
+    <h3>Recommended Routes</h3>
+    <p class="small">Based on current conditions</p>
+    <div id="routesList"></div>
+  </aside>
+
+</div>
+
+<div id="agentBox" class="agent-box hidden"></div>
   </section>
 
   <section id="how" class="how">
